@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_armory_v2::*;
+use bevy_armory_v2::prelude::*;
 
 fn main() {
     let mut app = App::new();
