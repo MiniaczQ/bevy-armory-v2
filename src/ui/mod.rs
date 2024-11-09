@@ -3,6 +3,7 @@ use bevy::{
     render::texture::{ImageLoaderSettings, ImageSampler},
 };
 
+pub mod change_propagation;
 pub mod cursor_carry;
 pub mod inventory;
 pub mod item;
@@ -22,6 +23,7 @@ pub fn nearest_sampler(settings: &mut ImageLoaderSettings) {
 
 pub mod prelude {
     pub use super::{
+        change_propagation::{InventoryChanged, ItemChanged, SlotChanged},
         cursor_carry::{BeingCarried, CursorCarry},
         inventory::{InventoryUi, SpawnInventoryUi},
         item::{ItemUi, SpawnItemUi},

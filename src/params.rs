@@ -1,11 +1,19 @@
-use bevy::{ecs::{query::{QueryData, QueryEntityError, WorldQuery}, system::SystemParam}, prelude::*};
+//! System parameters for accessing data from template-based items.
 
-use crate::components::{Extends, Item};
+use bevy::{
+    ecs::{
+        query::{QueryData, QueryEntityError, WorldQuery},
+        system::SystemParam,
+    },
+    prelude::*,
+};
 
-/// System parameter for accessing items.
+use crate::components::{Item, Template};
+
+/// System parameter for accessing data from template-based items.
 #[derive(SystemParam)]
 pub struct ItemData<'w, 's, D: QueryData + 'static> {
-    query: Query<'w, 's, (Option<&'static Extends>, Option<D>), With<Item>>,
+    query: Query<'w, 's, (Option<&'static Template>, Option<D>), With<Item>>,
 }
 
 impl<'w, 's, D: QueryData> ItemData<'w, 's, D> {
@@ -15,13 +23,14 @@ impl<'w, 's, D: QueryData> ItemData<'w, 's, D> {
             if maybe_data.is_some() {
                 break Ok(Some(entity));
             }
-            let Some(&Extends(new_entity)) = maybe_extends else {
+            let Some(&Template(new_entity)) = maybe_extends else {
                 break Ok(None);
             };
             entity = new_entity;
         }
     }
 
+    /// Access this item's components immutably if available or fallaback to template's components.
     pub fn extended_get(
         &self,
         entity: Entity,
@@ -32,6 +41,7 @@ impl<'w, 's, D: QueryData> ItemData<'w, 's, D> {
         Ok(self.query.get(entity).unwrap().1)
     }
 
+    /// Access this item's components immutably.
     pub fn get(
         &self,
         entity: Entity,
@@ -39,6 +49,7 @@ impl<'w, 's, D: QueryData> ItemData<'w, 's, D> {
         Ok(self.query.get(entity)?.1)
     }
 
+    /// Access this item's components mutably.
     pub fn get_mut(&mut self, entity: Entity) -> Result<Option<D::Item<'_>>, QueryEntityError> {
         Ok(self.query.get_mut(entity)?.1)
     }

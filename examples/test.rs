@@ -19,7 +19,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let pickaxe = commands
         .spawn((
             Item,
-            Extends(precursor),
+            Template(precursor),
             Name::new("item::pickaxe"),
             Icon(asset_server.load_with_settings("pickaxe.png", nearest_sampler)),
             CanMineBlocks,
@@ -28,12 +28,12 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let stone = commands
         .spawn((
             Item,
-            Extends(precursor),
+            Template(precursor),
             Name::new("item::stone"),
             Icon(asset_server.load_with_settings("stone.png", nearest_sampler)),
         ))
         .id();
-    let stored_stone = commands.spawn((Item, Extends(stone), Count(2))).id();
+    let stored_stone = commands.spawn((Item, Template(stone), Count(2))).id();
 
     // Spawn inventory
     let mut inventory = Inventory::new::<4>();
@@ -50,13 +50,13 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let ui_root = commands.spawn(Node::DEFAULT).id();
 
     commands.queue(SpawnInventoryUi {
-        parent_ui: ui_root,
+        parent: ui_root,
         offset: Vec2::new(0.0, 0.0),
-        inventory: source,
+        inventory: InventoryUi { data: source },
     });
     commands.queue(SpawnInventoryUi {
-        parent_ui: ui_root,
+        parent: ui_root,
         offset: Vec2::new(SLOT_SIZE * 2.0, 0.0),
-        inventory: destination,
+        inventory: InventoryUi { data: destination },
     });
 }

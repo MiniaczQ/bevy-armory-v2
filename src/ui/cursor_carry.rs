@@ -1,8 +1,10 @@
 use bevy::{prelude::*, window::PrimaryWindow};
 
-use crate::{change_propagation::InventoryChanged, components::Inventory};
+use crate::components::Inventory;
 
-use super::{item::ItemUi, slot::SlotUi, tooltip::Tooltip, ITEM_SIZE};
+use super::{
+    change_propagation::InventoryChanged, item::ItemUi, slot::SlotUi, tooltip::Tooltip, ITEM_SIZE,
+};
 
 pub fn plugin(app: &mut App) {
     app.add_observer(pickup_item);
@@ -81,7 +83,7 @@ fn drop_item(
     let src = parent.get();
     let src_slot = slots.get(src).unwrap();
     let no_operation = src == dst;
-    let destination_full = dst_slot.slot.is_some();
+    let destination_full = dst_slot.data.is_some();
     if !no_operation && destination_full {
         // TODO: Interaction with a different filled slot
         return;

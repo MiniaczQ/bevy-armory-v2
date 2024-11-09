@@ -1,3 +1,5 @@
+//! Core components for items.
+
 use bevy::prelude::*;
 
 /// Marker component for items.
@@ -8,16 +10,16 @@ pub struct Item;
 #[derive(Component)]
 pub struct Icon(pub Handle<Image>);
 
-/// Derive item from another item.
-/// If component lookup fails, the other item components will be looked up instead.
+/// Base this item on another item.
 #[derive(Component)]
-pub struct Extends(pub Entity);
+pub struct Template(pub Entity);
 
-/// Count signified how many items are stored in a slot.
+/// Stores data about amount of an item.
+/// This component shouldn't be used in template items.
 #[derive(Component)]
 pub struct Count(pub u32);
 
-/// Constant size container of items.
+/// Constant size container for items.
 #[derive(Component)]
 pub struct Inventory(pub Box<[Option<Entity>]>);
 

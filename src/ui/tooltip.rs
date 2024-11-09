@@ -10,6 +10,7 @@ pub fn plugin(app: &mut App) {
     app.add_observer(item_tooltip_despawn);
 }
 
+/// Marker component for tooltip UI root.
 #[derive(Component)]
 pub struct Tooltip;
 
@@ -22,7 +23,7 @@ fn item_tooltip_spawn(
     let Ok((item, transform)) = items.get(trigger.entity()) else {
         return;
     };
-    let item = names.extended_get(item.0).unwrap().unwrap();
+    let item = names.extended_get(item.data).unwrap().unwrap();
     let position = trigger.pointer_location.position - transform.translation().xy()
         + Vec2::splat(ITEM_SIZE / 2.0);
     commands

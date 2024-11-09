@@ -1,4 +1,5 @@
-pub mod change_propagation;
+//! Highly configurable crate for items and inventories.
+
 pub mod components;
 pub mod params;
 pub mod ui;
@@ -9,14 +10,13 @@ pub struct ItemPlugin;
 
 impl Plugin for ItemPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((change_propagation::plugin, ui::plugin));
+        app.add_plugins((ui::plugin,));
     }
 }
 
 pub mod prelude {
     pub use super::{
-        change_propagation::{InventoryChanged, ItemChanged, SlotChanged},
-        components::{Count, Extends, Icon, Inventory, Item},
+        components::{Count, Icon, Inventory, Item, Template},
         params::ItemData,
         ui::prelude::*,
         ItemPlugin,
