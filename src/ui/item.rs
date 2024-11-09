@@ -1,3 +1,5 @@
+//! UI representation of items.
+
 use bevy::{ecs::system::SystemState, prelude::*};
 
 use crate::{

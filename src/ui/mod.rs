@@ -11,7 +11,11 @@ pub mod slot;
 pub mod tooltip;
 
 pub fn plugin(app: &mut App) {
-    app.add_plugins((tooltip::plugin, cursor_carry::plugin));
+    app.add_plugins((
+        tooltip::plugin,
+        cursor_carry::plugin,
+        change_propagation::plugin,
+    ));
 }
 
 pub const ITEM_SIZE: f32 = 16.0 * 4.0;

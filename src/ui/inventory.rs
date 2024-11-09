@@ -1,3 +1,5 @@
+//! UI representation of inventory.
+
 use bevy::{ecs::system::SystemState, prelude::*};
 
 use crate::components::Inventory;

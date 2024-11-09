@@ -1,3 +1,5 @@
+//! Item tooltip display.
+
 use bevy::prelude::*;
 
 use crate::params::ItemData;

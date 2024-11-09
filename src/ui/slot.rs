@@ -1,3 +1,5 @@
+//! UI representation of item slot.
+
 use bevy::{ecs::system::SystemState, prelude::*};
 
 use super::{
