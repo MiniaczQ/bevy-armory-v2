@@ -7,6 +7,7 @@ pub mod change_propagation;
 pub mod cursor_carry;
 pub mod inventory;
 pub mod item;
+pub mod layout;
 pub mod slot;
 pub mod tooltip;
 
@@ -15,6 +16,7 @@ pub fn plugin(app: &mut App) {
         tooltip::plugin,
         cursor_carry::plugin,
         change_propagation::plugin,
+        layout::plugin,
     ));
 }
 

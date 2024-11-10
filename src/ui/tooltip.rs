@@ -4,7 +4,7 @@ use bevy::prelude::*;
 
 use crate::params::ItemData;
 
-use super::{cursor_carry::CursorCarry, item::ItemUi, ITEM_SIZE};
+use super::{cursor_carry::CursorCarry, item::ItemUi, layout::WindowClamp, ITEM_SIZE};
 
 pub fn plugin(app: &mut App) {
     app.add_observer(item_tooltip_spawn);
@@ -41,6 +41,7 @@ fn item_tooltip_spawn(
             PickingBehavior::IGNORE,
             GlobalZIndex(128),
             BackgroundColor(Color::Srgba(Srgba::new(0.3, 0.3, 0.3, 0.3))),
+            WindowClamp,
         ))
         .set_parent(trigger.entity());
 }

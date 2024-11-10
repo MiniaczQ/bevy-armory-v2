@@ -3,7 +3,8 @@ use bevy::{prelude::*, window::PrimaryWindow};
 use crate::components::Inventory;
 
 use super::{
-    change_propagation::InventoryChanged, item::ItemUi, slot::SlotUi, tooltip::Tooltip, ITEM_SIZE,
+    change_propagation::InventoryChanged, item::ItemUi, layout::CenterPosition, slot::SlotUi,
+    tooltip::Tooltip,
 };
 
 pub fn plugin(app: &mut App) {
@@ -45,26 +46,24 @@ fn pickup_item(
         UiImage::new(image.image.clone()),
         Node {
             position_type: PositionType::Absolute,
-            left: Val::Px(cursor.x - ITEM_SIZE / 2.0),
-            top: Val::Px(cursor.y - ITEM_SIZE / 2.0),
             height: node.height,
             width: node.width,
             ..default()
         },
         CursorCarry,
         PickingBehavior::IGNORE,
+        CenterPosition { position: cursor },
     ));
 }
 
 fn pickup_follow(
     window: Single<&Window, With<PrimaryWindow>>,
-    mut pickup: Single<&mut Node, With<CursorCarry>>,
+    mut pickup: Single<&mut CenterPosition, With<CursorCarry>>,
 ) {
     let Some(cursor) = window.cursor_position() else {
         return;
     };
-    pickup.left = Val::Px(cursor.x - ITEM_SIZE / 2.0);
-    pickup.top = Val::Px(cursor.y - ITEM_SIZE / 2.0);
+    pickup.position = cursor;
 }
 
 fn drop_item(
@@ -93,7 +92,7 @@ fn drop_item(
     commands.entity(*item).remove::<BeingCarried>();
     commands.entity(*pickup).despawn_recursive();
 
-    // interaction between empty and filled slot
+    // Interaction between empty and filled slot
     if src_slot.inventory == dst_slot.inventory {
         if src_slot.index != dst_slot.index {
             let mut inv = inventories.get_mut(src_slot.inventory).unwrap();
