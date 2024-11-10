@@ -4,7 +4,7 @@ use bevy::prelude::*;
 
 use crate::params::ItemData;
 
-use super::{cursor_carry::CursorCarry, item::ItemUi, layout::WindowClamp, ITEM_SIZE};
+use super::{carry::Carry, item::ItemUi, layout::WindowClamp, ITEM_SIZE};
 
 pub fn plugin(app: &mut App) {
     app.add_observer(item_tooltip_spawn);
@@ -19,9 +19,9 @@ pub struct Tooltip;
 fn item_tooltip_spawn(
     trigger: Trigger<Pointer<Over>>,
     mut commands: Commands,
-    items: Query<(&ItemUi, &GlobalTransform), Without<CursorCarry>>,
+    items: Query<(&ItemUi, &GlobalTransform), Without<Carry>>,
     names: ItemData<&Name>,
-    cursor_carry: Option<Single<(), With<CursorCarry>>>,
+    cursor_carry: Option<Single<(), With<Carry>>>,
 ) {
     let Ok((item, transform)) = items.get(trigger.entity()) else {
         return;

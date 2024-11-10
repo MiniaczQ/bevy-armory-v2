@@ -47,18 +47,20 @@ pub fn spawn_item(world: &mut World, item: Entity) -> EntityWorldMut {
         ))
         .id();
     if let Ok(Some(count)) = counts.get(item) {
-        commands
-            .spawn((
-                Node {
-                    position_type: PositionType::Absolute,
-                    bottom: Val::Percent(0.0),
-                    right: Val::Percent(0.0),
-                    ..default()
-                },
-                Text::new(format!("{}", count.0)),
-                PickingBehavior::IGNORE,
-            ))
-            .set_parent(item_ui);
+        if count.0 > 1 {
+            commands
+                .spawn((
+                    Node {
+                        position_type: PositionType::Absolute,
+                        bottom: Val::Percent(0.0),
+                        right: Val::Percent(0.0),
+                        ..default()
+                    },
+                    Text::new(format!("{}", count.0)),
+                    PickingBehavior::IGNORE,
+                ))
+                .set_parent(item_ui);
+        }
     }
     state.apply(world);
     world.entity_mut(item_ui)

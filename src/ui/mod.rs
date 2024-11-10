@@ -4,7 +4,7 @@ use bevy::{
 };
 
 pub mod change_propagation;
-pub mod cursor_carry;
+pub mod carry;
 pub mod inventory;
 pub mod item;
 pub mod layout;
@@ -14,7 +14,7 @@ pub mod tooltip;
 pub fn plugin(app: &mut App) {
     app.add_plugins((
         tooltip::plugin,
-        cursor_carry::plugin,
+        carry::plugin,
         change_propagation::plugin,
         layout::plugin,
     ));
@@ -30,7 +30,7 @@ pub fn nearest_sampler(settings: &mut ImageLoaderSettings) {
 pub mod prelude {
     pub use super::{
         change_propagation::{InventoryChanged, ItemChanged, SlotChanged},
-        cursor_carry::{BeingCarried, CursorCarry},
+        carry::{BeingCarried, Carry},
         inventory::{InventoryUi, SpawnInventoryUi},
         item::{ItemUi, SpawnItemUi},
         nearest_sampler,
