@@ -21,11 +21,15 @@ fn item_tooltip_spawn(
     mut commands: Commands,
     items: Query<(&ItemUi, &GlobalTransform), Without<CursorCarry>>,
     names: ItemData<&Name>,
+    cursor_carry: Option<Single<(), With<CursorCarry>>>,
 ) {
     let Ok((item, transform)) = items.get(trigger.entity()) else {
         return;
     };
-    let item = names.extended_get(item.data).unwrap().unwrap();
+    if cursor_carry.is_some() {
+        return;
+    }
+    let item = names.extended_get(item.item).unwrap().unwrap();
     let position = trigger.pointer_location.position - transform.translation().xy()
         + Vec2::splat(ITEM_SIZE / 2.0);
     commands

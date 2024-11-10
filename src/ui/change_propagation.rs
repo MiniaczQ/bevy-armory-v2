@@ -98,7 +98,7 @@ fn slot_changed(
     if let Some(item) = content {
         commands.queue(SpawnItemUi {
             parent: slot_entity,
-            item: ItemUi { data: item },
+            item,
         });
     }
 }

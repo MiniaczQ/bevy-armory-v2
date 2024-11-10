@@ -1,9 +1,15 @@
-use bevy::{math::Vec3A, prelude::*, window::PrimaryWindow};
+use bevy::{math::Vec3A, prelude::*, ui::UiSystem, window::PrimaryWindow};
 
 pub fn plugin(app: &mut App) {
     app.add_systems(
         PostUpdate,
-        (center_position, window_clamp).after(TransformSystem::TransformPropagate),
+        window_clamp.after(TransformSystem::TransformPropagate),
+    );
+    app.add_systems(
+        PostUpdate,
+        center_position
+            .after(UiSystem::Layout)
+            .before(TransformSystem::TransformPropagate),
     );
 }
 
@@ -17,12 +23,10 @@ pub struct CenterPosition {
 #[derive(Component)]
 pub struct WindowClamp;
 
-pub fn center_position(mut nodes: Query<(&mut GlobalTransform, &CenterPosition)>) {
+pub fn center_position(mut nodes: Query<(&mut Transform, &CenterPosition)>) {
     for (mut transform, center) in &mut nodes {
-        let mut affine = transform.affine();
-        affine.translation.x = center.position.x;
-        affine.translation.y = center.position.y;
-        *transform = GlobalTransform::from(affine);
+        transform.translation.x = center.position.x;
+        transform.translation.y = center.position.y;
     }
 }
 

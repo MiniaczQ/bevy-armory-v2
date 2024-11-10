@@ -2,10 +2,7 @@
 
 use bevy::{ecs::system::SystemState, prelude::*};
 
-use super::{
-    item::{ItemUi, SpawnItemUi},
-    nearest_sampler, SLOT_SIZE,
-};
+use super::{item::SpawnItemUi, nearest_sampler, SLOT_SIZE};
 
 /// UI element representing an item slot of an inventory.
 #[derive(Component)]
@@ -43,6 +40,8 @@ impl Command for SpawnSlotUi {
                     top: Val::Px(self.offset.y),
                     width: Val::Px(SLOT_SIZE),
                     height: Val::Px(SLOT_SIZE),
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
                     ..default()
                 },
             ))
@@ -50,10 +49,7 @@ impl Command for SpawnSlotUi {
             .id();
 
         if let Some(item) = content {
-            commands.queue(SpawnItemUi {
-                parent: root,
-                item: ItemUi { data: item },
-            });
+            commands.queue(SpawnItemUi { parent: root, item });
         };
         state.apply(world);
     }

@@ -3,7 +3,10 @@ use bevy::{prelude::*, window::PrimaryWindow};
 use crate::components::Inventory;
 
 use super::{
-    change_propagation::InventoryChanged, item::ItemUi, layout::CenterPosition, slot::SlotUi,
+    change_propagation::InventoryChanged,
+    item::{spawn_item, ItemUi},
+    layout::CenterPosition,
+    slot::SlotUi,
     tooltip::Tooltip,
 };
 
@@ -22,14 +25,15 @@ pub struct CursorCarry;
 fn pickup_item(
     trigger: Trigger<Pointer<Down>>,
     mut commands: Commands,
-    mut items: Query<(&Children, &UiImage, &Node, &mut Visibility), With<ItemUi>>,
+    mut items: Query<(&Children, &ItemUi, &mut Visibility)>,
     tooltips: Query<(), With<Tooltip>>,
     pickup: Option<Single<(), With<CursorCarry>>>,
     window: Single<&Window, With<PrimaryWindow>>,
 ) {
-    let Ok((children, image, node, mut visibility)) = items.get_mut(trigger.entity()) else {
+    let Ok((children, item_ui, mut visibility)) = items.get_mut(trigger.entity()) else {
         return;
     };
+    let item = item_ui.item;
     if pickup.is_some() {
         return;
     }
@@ -42,18 +46,13 @@ fn pickup_item(
     *visibility = Visibility::Hidden;
 
     let cursor = window.cursor_position().unwrap();
-    commands.spawn((
-        UiImage::new(image.image.clone()),
-        Node {
-            position_type: PositionType::Absolute,
-            height: node.height,
-            width: node.width,
-            ..default()
-        },
-        CursorCarry,
-        PickingBehavior::IGNORE,
-        CenterPosition { position: cursor },
-    ));
+    commands.queue(move |world: &mut World| {
+        spawn_item(world, item).insert((
+            CursorCarry,
+            PickingBehavior::IGNORE,
+            CenterPosition { position: cursor },
+        ));
+    });
 }
 
 fn pickup_follow(
