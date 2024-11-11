@@ -121,10 +121,11 @@ fn carry_interact(
     let Ok(slot) = slots.get(slot_entity) else {
         return;
     };
+    #[allow(clippy::single_match)]
     match trigger.button {
         PointerButton::Primary => {
             commands.trigger(Interaction::<Swap> {
-                action: PhantomData::default(),
+                action: PhantomData,
                 data: InteractionData::new(carry_entity, 0, slot.inventory, slot.index),
             });
         }
@@ -197,9 +198,7 @@ pub fn swap(
         InteractionData::SameSlot {
             inventory: _,
             index: _,
-        } => {
-            return;
-        }
+        } => {}
         InteractionData::SameInventory {
             inventory,
             index_a,
