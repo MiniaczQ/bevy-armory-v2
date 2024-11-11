@@ -4,7 +4,7 @@ use crate::{
     components::{Inventory, Item, Template},
     ui::{
         inventory::InventoryUi,
-        item::{ItemUi, SpawnItemUi},
+        item::{spawn_item, ItemUi},
         slot::SlotUi,
     },
 };
@@ -80,13 +80,13 @@ fn item_changed(
 
 fn slot_changed(
     trigger: Trigger<SlotChanged>,
-    mut slots: Query<(&mut SlotUi, Option<&Children>)>,
+    mut slots: Query<(&mut SlotUi, Option<&Children>, Option<&PickingBehavior>)>,
     items: Query<(), With<ItemUi>>,
     mut commands: Commands,
 ) {
     let slot_entity = trigger.entity();
     let content = trigger.event().0;
-    let (mut slot, children) = slots.get_mut(slot_entity).unwrap();
+    let (mut slot, children, picking) = slots.get_mut(slot_entity).unwrap();
     slot.data = content;
     if let Some(children) = children {
         for &child in children {
@@ -95,10 +95,14 @@ fn slot_changed(
             }
         }
     }
+    let picking = picking.cloned();
     if let Some(item) = content {
-        commands.queue(SpawnItemUi {
-            parent: slot_entity,
-            item,
+        commands.queue(move |world: &mut World| {
+            let mut item = spawn_item(world, item);
+            item.set_parent(slot_entity);
+            if let Some(picking) = picking {
+                item.insert(picking);
+            }
         });
     }
 }

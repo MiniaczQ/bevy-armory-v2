@@ -21,12 +21,14 @@ fn item_tooltip_spawn(
     mut commands: Commands,
     items: Query<(&ItemUi, &GlobalTransform), Without<Carry>>,
     names: ItemData<&Name>,
-    cursor_carry: Option<Single<(), With<Carry>>>,
+    carriers: Query<&Carry>,
 ) {
     let Ok((item, transform)) = items.get(trigger.entity()) else {
         return;
     };
-    if cursor_carry.is_some() {
+    let pointer_id = trigger.pointer_id;
+    let cursor_used = carriers.iter().any(|c| c.pointer_id == pointer_id);
+    if cursor_used {
         return;
     }
     let item = names.extended_get(item.item).unwrap().unwrap();

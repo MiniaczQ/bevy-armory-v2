@@ -26,9 +26,7 @@ pub struct SpawnItemUi {
 
 impl Command for SpawnItemUi {
     fn apply(self, world: &mut World) {
-        spawn_item(world, self.item)
-            .insert(ItemUi { item: self.item })
-            .set_parent(self.parent);
+        spawn_item(world, self.item).set_parent(self.parent);
     }
 }
 
@@ -38,6 +36,7 @@ pub fn spawn_item(world: &mut World, item: Entity) -> EntityWorldMut {
     let icon = icons.extended_get(item).unwrap().unwrap();
     let item_ui = commands
         .spawn((
+            ItemUi { item },
             UiImage::new(icon.0.clone()),
             Node {
                 width: Val::Px(ITEM_SIZE),

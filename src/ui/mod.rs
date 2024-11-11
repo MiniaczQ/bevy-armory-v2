@@ -3,8 +3,8 @@ use bevy::{
     render::texture::{ImageLoaderSettings, ImageSampler},
 };
 
-pub mod change_propagation;
 pub mod carry;
+pub mod change_propagation;
 pub mod inventory;
 pub mod item;
 pub mod layout;
@@ -29,8 +29,8 @@ pub fn nearest_sampler(settings: &mut ImageLoaderSettings) {
 
 pub mod prelude {
     pub use super::{
+        carry::Carry,
         change_propagation::{InventoryChanged, ItemChanged, SlotChanged},
-        carry::{BeingCarried, Carry},
         inventory::{InventoryUi, SpawnInventoryUi},
         item::{ItemUi, SpawnItemUi},
         nearest_sampler,
